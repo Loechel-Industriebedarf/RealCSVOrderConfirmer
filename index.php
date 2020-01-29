@@ -14,16 +14,15 @@
 	
 	$file = fopen('tracking.csv', 'r');
 
-	while (($line = fgetcsv($file, 0, ";")) !== FALSE) {
-		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL, $apiurl); //Add url to curl	
-		$response = curl_exec($curl); //Call url via curl
-			
-		var_dump($response); //Show response
+	while (($line = fgetcsv($file, 0, ";")) !== FALSE) {	
+		try{
+			$client->orderUnits()->send($line[0], $line[1], $line[2]);
+			echo "SUCCESS: " . $line[0] . " " . $line[1] . " " . $line[2];
+		}
+		catch(Exception $e){
+			echo "ERROR: &nbsp;&nbsp;" . $line[0] . " " . $line[1] . " " . $line[2];
+		}	
 		echo "<br>";
-		
-		
-		$client->orderUnits()->send($line[0], $line[1], $line[2]);
 	}
 	
 	fclose($file);
