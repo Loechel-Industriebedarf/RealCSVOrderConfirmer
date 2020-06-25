@@ -12,15 +12,16 @@
 		
 	
 	
-	$file = fopen('tracking.csv', 'r');
+	$file = fopen('realtracking.csv', 'r');
 
 	while (($line = fgetcsv($file, 0, ";")) !== FALSE) {	
 		try{
-			$client->orderUnits()->send($line[0], $line[1], $line[2]);
-			echo "SUCCESS: " . $line[0] . " " . $line[1] . " " . $line[2];
+			$result = $client->orderUnits()->send($line[0], $line[1], $line[2]);
+			if(!$result){ throw new Exception("Error."); }
+			echo "SUCCESS: " . $line[3] . " " . $line[0] . " " . $line[1] . " " . $line[2];
 		}
 		catch(Exception $e){
-			echo "ERROR: &nbsp;&nbsp;" . $line[0] . " " . $line[1] . " " . $line[2];
+			echo "<b>ERROR: &nbsp;&nbsp;" . $line[3] . " ". $line[0] . " " . $line[1] . " " . $line[2] . "</b>";
 		}	
 		echo "<br>";
 	}
